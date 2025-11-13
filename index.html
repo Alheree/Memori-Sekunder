@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memori Sekunder - Cyberpunk Style</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000000;
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated background grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        header {
+            position: relative;
+            z-index: 2;
+            border-bottom: 3px solid #ffffff;
+            padding: 40px 20px;
+            text-align: center;
+            background: linear-gradient(90deg, rgba(0,0,0,1), rgba(0,0,0,0.8), rgba(0,0,0,1));
+            box-shadow: 0 0 30px rgba(255,255,255,0.3);
+            animation: glitch 3s ease-in-out infinite;
+        }
+
+        @keyframes glitch {
+            0%, 100% { text-shadow: 3px 3px 0px rgba(255,255,255,0.5); }
+            50% { text-shadow: -3px -3px 0px rgba(255,255,255,0.5); }
+        }
+
+        header h1 {
+            font-size: 3em;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 10px;
+            border: 2px solid #ffffff;
+            padding: 20px;
+            display: inline-block;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .info-box {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 10px 20px;
+            border-top: 2px dashed #ffffff;
+            border-bottom: 2px dashed #ffffff;
+            font-size: 0.9em;
+            letter-spacing: 2px;
+        }
+
+        container {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            border-left: 5px solid #ffffff;
+            padding-left: 30px;
+            position: relative;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            left: -12px;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            background: #ffffff;
+            border: 3px solid #000000;
+            box-shadow: 0 0 10px rgba(255,255,255,0.8);
+        }
+
+        h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #ffffff;
+            padding-bottom: 15px;
+            position: relative;
+            text-shadow: 2px 2px 0px rgba(255,255,255,0.3);
+        }
+
+        h3 {
+            font-size: 1.3em;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #ffffff;
+            border-left: 3px solid #ffffff;
+            padding-left: 15px;
+        }
+
+        h2::after {
+            content: '█';
+            position: absolute;
+            right: 0;
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+            0%, 49%, 100% { opacity: 1; }
+            50%, 99% { opacity: 0; }
+        }
+
+        p {
+            line-height: 1.8;
+            margin-bottom: 15px;
+            font-size: 1.05em;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        li::marker {
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .device-card {
+            background: rgba(255,255,255,0.03);
+            border: 2px solid #ffffff;
+            padding: 25px;
+            margin: 20px 0;
+            position: relative;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 0 10px rgba(255,255,255,0.1);
+        }
+
+        .device-card:hover {
+            background: rgba(255,255,255,0.08);
+            box-shadow: 0 0 20px rgba(255,255,255,0.5), inset 0 0 10px rgba(255,255,255,0.1);
+            transform: translateY(-5px);
+        }
+
+        .device-card::before {
+            content: '⚡';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            font-size: 1.5em;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .feature-box {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid #ffffff;
+            padding: 15px;
+            border-radius: 0;
+            transition: all 0.3s ease;
+        }
+
+        .feature-box:hover {
+            background: rgba(255,255,255,0.1);
+            box-shadow: 0 0 15px rgba(255,255,255,0.4);
+        }
+
+        .feature-box h4 {
+            color: #ffffff;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.95em;
+        }
+
+        .feature-box p {
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .pros {
+            color: #ffffff;
+            border-left: 3px solid #ffffff;
+            padding-left: 10px;
+        }
+
+        .cons {
+            color: #ffffff;
+            border-left: 3px solid #ffffff;
+            padding-left: 10px;
+        }
+
+        .highlight {
+            background: rgba(255,255,255,0.1);
+            padding: 2px 6px;
+            border: 1px dashed #ffffff;
+            font-weight: bold;
+        }
+
+        footer {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 30px 20px;
+            border-top: 3px solid #ffffff;
+            margin-top: 50px;
+            background: linear-gradient(90deg, rgba(0,0,0,1), rgba(0,0,0,0.8), rgba(0,0,0,1));
+            font-size: 0.9em;
+            letter-spacing: 2px;
+            box-shadow: 0 0 30px rgba(255,255,255,0.2);
+        }
+
+        .footer-line {
+            margin-bottom: 10px;
+            animation: typewriter 2s steps(50, end) infinite;
+        }
+
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        .divider {
+            height: 2px;
+            background: repeating-linear-gradient(90deg, #ffffff, #ffffff 10px, transparent 10px, transparent 20px);
+            margin: 30px 0;
+            animation: slide 2s linear infinite;
+        }
+
+        @keyframes slide {
+            0% { background-position: 0; }
+            100% { background-position: 40px; }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+                padding: 15px;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            container {
+                padding: 20px 10px;
+            }
+
+            .section {
+                padding-left: 20px;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #000000;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ffffff;
+            border: 2px solid #000000;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.8);
+            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>⬡ MEMORI SEKUNDER ⬡</h1>
+        <div class="info-box">
+            Nama: Al Rasya Aliftira Syahputra | NIM: 2505112101 | Kelas: CE 1-D
+        </div>
+    </header>
+
+    <container>
+        <!-- INTRODUCTION -->
+        <div class="section">
+            <h2>01 - PENDAHULUAN</h2>
+            <p>
+                Dalam perkembangan teknologi komputer, penyimpanan data memegang peranan yang sangat penting. Semua aktivitas digital mulai dari menjalankan sistem operasi, mengolah dokumen, hingga menyimpan multimedia memerlukan media penyimpanan yang andal dan efisien.
+            </p>
+            <p>
+                <span class="highlight">Memori sekunder</span> merupakan media penyimpanan permanen yang mampu mempertahankan data meskipun komputer dimatikan. Berbeda dengan memori utama (RAM) yang bersifat sementara, memori sekunder berfungsi sebagai tempat penyimpanan jangka panjang untuk sistem operasi, program, dan data pengguna.
+            </p>
+            <p>
+                Seiring kemajuan teknologi, memori sekunder telah berkembang pesat, baik dari segi kapasitas, kecepatan, maupun bentuk fisiknya. Perangkat tradisional seperti <span class="highlight">HDD</span> kini bersaing dengan <span class="highlight">SSD</span> dan <span class="highlight">NVMe</span>, yang menawarkan kecepatan baca-tulis jauh lebih tinggi.
+            </p>
+            <div class="divider"></div>
+        </div>
+
+        <!-- SSD -->
+        <div class="section">
+            <h2>02 - SSD (Solid State Drive)</h2>
+            <div class="device-card">
+                <h3>📀 Pengertian</h3>
+                <p>
+                    Solid State Drive (SSD) adalah jenis media penyimpanan yang menggunakan teknologi memori flash NAND untuk menyimpan data. Tidak seperti HDD yang menggunakan piringan magnetik berputar, SSD tidak memiliki komponen mekanis. Hal ini membuat SSD lebih cepat, tahan terhadap guncangan, dan bekerja lebih senyap.
+                </p>
+
+                <h3>⚙️ Fungsi Utama</h3>
+                <ul>
+                    <li>Menyimpan sistem operasi dan aplikasi agar komputer dapat bekerja lebih cepat</li>
+                    <li>Menyimpan data pengguna dengan kecepatan baca/tulis yang tinggi</li>
+                    <li>Mengurangi waktu akses dan meningkatkan respons sistem secara keseluruhan</li>
+                </ul>
+
+                <h3>🔧 Komponen Utama</h3>
+                <ul>
+                    <li><strong>NAND Flash Memory:</strong> tempat data disimpan dalam bentuk sel elektronik</li>
+                    <li><strong>Controller:</strong> mengatur aliran data antara komputer dan chip memori</li>
+                    <li><strong>Cache Memory:</strong> mempercepat proses baca/tulis data sementara</li>
+                </ul>
+
+                <h3>✅ Kelebihan & ❌ Kelemahan</h3>
+                <div class="features">
+                    <div class="feature-box">
+                        <h4>✅ Kelebihan</h4>
+                        <p class="pros">
+                            • Kecepatan baca/tulis sangat tinggi<br>
+                            • Tahan terhadap guncangan<br>
+                            • Konsumsi daya rendah<br>
+                            • Tidak berisik
+                        </p>
+                    </div>
+                    <div class="feature-box">
+                        <h4>❌ Kelemahan</h4>
+                        <p class="cons">
+                            • Harga lebih mahal dari HDD<br>
+                            • Umur terbatas pada siklus tulis<br>
+                            • Kapasitas cenderung lebih kecil
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="divider"></div>
+        </div>
+
+        <!-- HDD -->
+        <div class="section">
+            <h2>03 - HDD (Hard Disk Drive)</h2>
+            <div class="device-card">
+                <h3>📀 Pengertian</h3>
+                <p>
+                    Hard Disk Drive (HDD) adalah media penyimpanan magnetik yang menggunakan piringan logam berputar untuk membaca dan menulis data. Teknologi ini telah digunakan selama puluhan tahun dan masih menjadi pilihan utama untuk penyimpanan berkapasitas besar dengan biaya yang lebih terjangkau.
+                </p>
+
+                <h3>⚙️ Fungsi Utama</h3>
+                <ul>
+                    <li>Menyimpan sistem operasi, aplikasi, dan file pengguna dalam kapasitas besar</li>
+                    <li>Media penyimpanan utama atau sekunder untuk data yang jarang diakses</li>
+                    <li>Digunakan sebagai penyimpanan cadangan (backup drive)</li>
+                </ul>
+
+                <h3>🔧 Komponen Utama</h3>
+                <ul>
+                    <li><strong>Piringan Magnetik (Platter):</strong> tempat data disimpan dalam bentuk magnetik</li>
+                    <li><strong>Head Baca/Tulis:</strong> membaca dan menulis data pada permukaan platter</li>
+                    <li><strong>Spindle Motor:</strong> memutar piringan pada kecepatan 5400-7200 RPM</li>
+                    <li><strong>PCB Controller:</strong> mengatur komunikasi antara HDD dan komputer</li>
+                </ul>
+
+                <h3>✅ Kelebihan & ❌ Kelemahan</h3>
+                <div class="features">
+                    <div class="feature-box">
+                        <h4>✅ Kelebihan</h4>
+                        <p class="pros">
+                            • Harga per GB lebih murah<br>
+                            • Kapasitas sangat besar (Terabyte)<br>
+                            • Tersedia luas di pasaran
+                        </p>
+                    </div>
+                    <div class="feature-box">
+                        <h4>❌ Kelemahan</h4>
+                        <p class="cons">
+                            • Kecepatan baca/tulis lambat<br>
+                            • Rentan terhadap guncangan<br>
+                            • Menghasilkan suara dan panas<br>
+                            • Memerlukan daya lebih besar
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="divider"></div>
+        </div>
+
+        <!-- OPTICAL DRIVE -->
+        <div class="section">
+            <h2>04 - OPTICAL DRIVE</h2>
+            <div class="device-card">
+                <h3>📀 Pengertian</h3>
+                <p>
+                    Optical drive adalah perangkat yang menggunakan sinar laser untuk membaca dan menulis data pada media optik seperti CD, DVD, dan Blu-ray Disc. Meskipun penggunaannya semakin menurun, perangkat ini masih ditemukan pada beberapa komputer desktop.
+                </p>
+
+                <h3>⚙️ Fungsi Utama</h3>
+                <ul>
+                    <li>Membaca dan menulis data pada media optik (CD, DVD, Blu-ray)</li>
+                    <li>Menginstal sistem operasi atau perangkat lunak dari cakram</li>
+                    <li>Memutar media hiburan seperti film dan musik</li>
+                    <li>Membuat cadangan (backup) data dalam bentuk cakram</li>
+                </ul>
+
+                <h3>✅ Kelebihan & ❌ Kelemahan</h3>
+                <div class="features">
+                    <div class="feature-box">
+                        <h4>✅ Kelebihan</h4>
+                        <p class="pros">
+                            • Media dapat dilepas dengan mudah<br>
+                            • Umur penyimpanan relatif panjang<br>
+                            • Harga media sangat murah<br>
+                            • Tidak terpengaruh medan magnet
+                        </p>
+                    </div>
+                    <div class="feature-box">
+                        <h4>❌ Kelemahan</h4>
+                        <p class="cons">
+                            • Kapasitas terbatas (CD: 700MB, DVD: 4.7GB)<br>
+                            • Kecepatan baca/tulis rendah<br>
+                            • Rentan terhadap goresan<br>
+                            • Jarang digunakan modern
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="divider"></div>
+        </div>
+
+        <!-- NVMe -->
+        <div class="section">
+            <h2>05 - NVMe (Non-Volatile Memory Express)</h2>
+            <div class="device-card">
+                <h3>📀 Pengertian</h3>
+                <p>
+                    NVMe (Non-Volatile Memory Express) adalah protokol komunikasi yang dirancang khusus untuk SSD berbasis PCI Express (PCIe). NVMe memberikan jalur data langsung antara penyimpanan dan prosesor, sehingga memungkinkan transfer data jauh lebih cepat dibanding SSD SATA konvensional.
+                </p>
+
+                <h3>⚙️ Fungsi Utama</h3>
+                <ul>
+                    <li>Mempercepat proses booting, pemuatan aplikasi, dan transfer file besar</li>
+                    <li>Digunakan pada laptop, PC gaming, dan workstation untuk kinerja tinggi</li>
+                    <li>Mengoptimalkan performa komputer modern</li>
+                </ul>
+
+                <h3>✅ Kelebihan & ❌ Kelemahan</h3>
+                <div class="features">
+                    <div class="feature-box">
+                        <h4>✅ Kelebihan</h4>
+                        <p class="pros">
+                            • Kecepatan ekstrem (hingga ribuan MB/s)<br>
+                            • Latensi sangat rendah<br>
+                            • Efisien dalam pengolahan paralel
+                        </p>
+                    </div>
+                    <div class="feature-box">
+                        <h4>❌ Kelemahan</h4>
+                        <p class="cons">
+                            • Harga lebih mahal dari SSD SATA<br>
+                            • Membutuhkan slot M.2 atau PCIe<br>
+                            • Panas lebih tinggi saat transfer besar
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="divider"></div>
+        </div>
+
+        <!-- FLASH DRIVE -->
+        <div class="section">
+            <h2>06 - FLASH DRIVE (USB Flashdisk)</h2>
+            <div class="device-card">
+                <h3>📀 Pengertian</h3>
+                <p>
+                    Flash drive adalah perangkat penyimpanan portabel yang menggunakan teknologi memori flash untuk menyimpan data. Dihubungkan melalui port USB dan dapat menyimpan data secara permanen tanpa memerlukan sumber daya listrik terus-menerus. Bentuknya kecil dan ringan, menjadikannya alat penyimpanan eksternal paling populer.
+                </p>
+
+                <h3>⚙️ Fungsi Utama</h3>
+                <ul>
+                    <li>Menyimpan dan memindahkan data antar perangkat dengan cepat</li>
+                    <li>Digunakan untuk menyimpan dokumen, musik, foto, dan video</li>
+                    <li>Media instalasi sistem operasi atau software</li>
+                    <li>Alat backup data portabel</li>
+                </ul>
+
+                <h3>✅ Kelebihan & ❌ Kelemahan</h3>
+                <div class="features">
+                    <div class="feature-box">
+                        <h4>✅ Kelebihan</h4>
+                        <p class="pros">
+                            • Ukuran kecil dan mudah dibawa<br>
+                            • Tidak membutuhkan daya eksternal<br>
+                            • Kecepatan transfer tinggi<br>
+                            • Kompatibel dengan semua perangkat
+                        </p>
+                    </div>
+                    <div class="feature-box">
+                        <h4>❌ Kelemahan</h4>
+                        <p class="cons">
+                            • Kapasitas terbatas<br>
+                            • Mudah hilang<br>
+                            • Dapat rusak dengan penggunaan berlebihan<br>
+                            • Rentan terhadap virus
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="divider"></div>
+        </div>
+
+        <!-- EXTERNAL HDD -->
+        <div class="section">
+            <h2>07 - EXTERNAL HARD DISK</h2>
+            <div class="device-card">
+                <h3>📀 Pengertian</h3>
+                <p>
+                    External hard disk adalah perangkat penyimpanan eksternal yang menggunakan prinsip kerja seperti hard disk internal, namun dilengkapi casing pelindung dan koneksi eksternal (USB atau Thunderbolt). Digunakan untuk menyimpan data dalam kapasitas besar, dari ratusan gigabyte hingga beberapa terabyte.
+                </p>
+
+                <h3>⚙️ Fungsi Utama</h3>
+                <ul>
+                    <li>Menyimpan file berukuran besar seperti video, game, dan arsip data</li>
+                    <li>Membuat backup data dari komputer</li>
+                    <li>Memindahkan data antar perangkat dengan kapasitas besar</li>
+                    <li>Menyediakan ruang tambahan bagi perangkat dengan penyimpanan terbatas</li>
+                </ul>
+
+                <h3>✅ Kelebihan & ❌ Kelemahan</h3>
+                <div class="features">
+                    <div class="feature-box">
+                        <h4>✅ Kelebihan</h4>
+                        <p class="pros">
+                            • Kapasitas besar (hingga terabyte)<br>
+                            • Harga per GB lebih murah<br>
+                            • Backup otomatis<br>
+                            • Mudah dihubungkan via USB
+                        </p>
+                    </div>
+                    <div class="feature-box">
+                        <h4>❌ Kelemahan</h4>
+                        <p class="cons">
+                            • Lebih besar dan berat<br>
+                            • Rentan terhadap benturan<br>
+                            • Kecepatan lebih lambat dari SSD<br>
+                            • Membutuhkan daya lebih besar
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="divider"></div>
+        </div>
+
+        <!-- MEMORY CARD -->
+        <div class="section">
+            <h2>08 - MEMORY CARD (Kartu Memori)</h2>
+            <div class="device-card">
+                <h3>📀 Pengertian</h3>
+                <p>
+                    Memory card atau kartu memori adalah perangkat penyimpanan data berukuran kecil yang menggunakan teknologi memori flash. Umumnya digunakan pada perangkat portabel seperti kamera digital, smartphone, tablet, dan konsol game.
+                </p>
+
+                <h3>⚙️ Fungsi Utama</h3>
+                <ul>
+                    <li>Menambah kapasitas penyimpanan perangkat seperti kamera dan ponsel</li>
+                    <li>Menyimpan data multimedia seperti foto, video, dan musik</li>
+                    <li>Memudahkan transfer data antar perangkat portabel</li>
+                    <li>Menyimpan aplikasi atau data sistem tambahan</li>
+                </ul>
+
+                <h3>✅ Kelebihan & ❌ Kelemahan</h3>
+                <div class="features">
+                    <div class="feature-box">
+                        <h4>✅ Kelebihan</h4>
+                        <p class="pros">
+                            • Ukuran sangat kecil dan ringan<br>
+                            • Mudah dilepas dan dipasang<br>
+                            • Konsumsi daya sangat rendah<br>
+                            • Berbagai kapasitas dan jenis
+                        </p>
+                    </div>
+                    <div class="feature-box">
+                        <h4>❌ Kelemahan</h4>
+                        <p class="cons">
+                            • Mudah rusak atau hilang<br>
+                            • Kecepatan bervariasi<br>
+                            • Dapat korupsi saat pencabutan<br>
+                            • Umur pemakaian terbatas
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="divider"></div>
+        </div>
+
+        <!-- MAGNETIC TAPE -->
+        <div class="section">
+            <h2>09 - MAGNETIC TAPE</h2>
+            <div class="device-card">
+                <h3>📀 Pengertian</h3>
+                <p>
+                    Magnetic tape adalah media penyimpanan data berbasis pita magnetik yang digunakan untuk arsip data dan sistem cadangan berskala besar. Media ini bekerja dengan prinsip magnetisasi pada lapisan feromagnetik yang dilapisi di atas pita plastik panjang. Meskipun tergolong teknologi lama, magnetic tape masih relevan karena kapasitas besar dan biaya rendah.
+                </p>
+
+                <h3>⚙️ Fungsi Utama</h3>
+                <ul>
+                    <li>Menyimpan data dalam jumlah besar untuk arsip jangka panjang</li>
+                    <li>Media backup bagi perusahaan dan lembaga riset</li>
+                    <li>Penyimpanan data yang jarang diakses (cold storage)</li>
+                    <li>Solusi penyimpanan berbiaya rendah untuk data historis</li>
+                </ul>
+
+                <h3>✅ Kelebihan & ❌ Kelemahan</h3>
+                <div class="features">
+                    <div class="feature-box">
+                        <h4>✅ Kelebihan</h4>
+                        <p class="pros">
+                            • Kapasitas sangat besar<br>
+                            • Biaya per GB rendah<br>
+                            • Tahan lama (hingga puluhan tahun)<br>
+                            • Aman untuk arsip
+                        </p>
+                    </div>
+                    <div class="feature-box">
+                        <h4>❌ Kelemahan</h4>
+                        <p class="cons">
+                            • Akses data sangat lambat<br>
+                            • Membutuhkan perangkat khusus<br>
+                            • Tidak praktis untuk penggunaan sehari-hari<br>
+                            • Rentan rusak dari medan magnet
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="divider"></div>
+        </div>
+
+        <!-- CLOUD STORAGE -->
+        <div class="section">
+            <h2>10 - CLOUD STORAGE</h2>
+            <div class="device-card">
+                <h3>📀 Pengertian</h3>
+                <p>
+                    Cloud storage adalah layanan penyimpanan data berbasis internet yang memungkinkan pengguna menyimpan, mengelola, dan mengakses file dari jarak jauh. Data disimpan di server milik penyedia layanan cloud seperti Google Drive, Dropbox, OneDrive, atau Amazon S3. Pengguna dapat mengakses data kapan saja melalui koneksi internet.
+                </p>
+
+                <h3>⚙️ Fungsi Utama</h3>
+                <ul>
+                    <li>Menyimpan data secara online agar dapat diakses dari mana saja</li>
+                    <li>Menyinkronkan file otomatis antar perangkat pengguna</li>
+                    <li>Backup digital untuk mencegah kehilangan data fisik</li>
+                    <li>Memungkinkan berbagi file dan kolaborasi real-time</li>
+                    <li>Menyediakan keamanan data melalui enkripsi dan autentikasi</li>
+                </ul>
+
+                <h3>✅ Kelebihan & ❌ Kelemahan</h3>
+                <div class="features">
+                    <div class="feature-box">
+                        <h4>✅ Kelebihan</h4>
+                        <p class="pros">
+                            • Akses kapan saja via internet<br>
+                            • Tidak perlu perangkat fisik<br>
+                            • Kapasitas dapat ditingkatkan<br>
+                            • Mudah berbagi data
+                        </p>
+                    </div>
+                    <div class="feature-box">
+                        <h4>❌ Kelemahan</h4>
+                        <p class="cons">
+                            • Membutuhkan koneksi internet stabil<br>
+                            • Risiko keamanan/kebocoran data<br>
+                            • Ada biaya untuk kapasitas besar<br>
+                            • Ketergantungan pada provider
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="divider"></div>
+        </div>
+
+        <!-- KESIMPULAN -->
+        <div class="section">
+            <h2>11 - KESIMPULAN</h2>
+            <p>
+                Memori sekunder merupakan elemen penting dalam sistem komputer karena berfungsi sebagai tempat penyimpanan data secara permanen. Setiap jenis memori sekunder memiliki karakteristik, fungsi, serta kelebihan dan kelemahannya masing-masing.
+            </p>
+            <p>
+                Perangkat seperti <span class="highlight">SSD</span> dan <span class="highlight">NVMe</span> menawarkan kecepatan tinggi dan efisiensi energi, cocok untuk komputer modern yang menuntut performa cepat. <span class="highlight">HDD</span> dan <span class="highlight">External Hard Disk</span> masih menjadi pilihan populer karena kapasitas besar dengan biaya relatif murah.
+            </p>
+            <p>
+                Di sisi lain, <span class="highlight">Magnetic Tape</span> masih relevan dalam lingkungan penyimpanan arsip berskala besar karena biayanya yang rendah dan daya tahan jangka panjang. <span class="highlight">Cloud Storage</span> menghadirkan pendekatan baru dalam penyimpanan modern dengan fleksibilitas tinggi dan kemudahan akses jarak jauh.
+            </p>
+            <p>
+                Dengan memahami berbagai jenis memori sekunder, pengguna dapat memilih kombinasi yang sesuai dengan kebutuhan baik dari segi kecepatan, kapasitas, keamanan, maupun biaya.
+            </p>
+        </div>
+
+    </container>
+
+    <footer>
+        <div class="footer-line">⚡ MEMORI SEKUNDER - TEKNOLOGI PENYIMPANAN DATA MODERN ⚡</div>
+        <div class="footer-line">█ Artikel Organisasi Komputer | Program D3 Teknik Komputer █</div>
+        <div class="footer-line">/ / / / / Cyberpunk Black & White Design / / / / /</div>
+    </footer>
+
+</body>
+</html>
